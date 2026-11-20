@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Result System</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>🎓 Student Dashboard</h1>
+      <p>Check Student Marks & Results</p>
+      <h3>Student List</h3>
+      <div id="studentList"></div>
+      <h3>Select Student</h3>
+      <select id="studentSelect">
+        <option value="">Select Student</option>
+      </select>
+      <button onclick="getMarks()">Get Marks</button>
+      <h3 id="loading"></h3>
+      <div id="result"></div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
