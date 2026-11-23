@@ -1,75 +1,238 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(120deg, #dbeafe, #e9d5ff);
-  text-align: center;
-  padding: 30px;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #dbeafe, #ede9fe);
+    padding: 30px 15px;
+    color: #1e293b;
 }
 
 .container {
-  background: white;
-  max-width: 400px;
-  margin: auto;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 5px 20px #999;
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 5px 25px #00000015;
 }
 
-h1 {
-  color: #2563eb;
+/* Header */
+
+header {
+    background: linear-gradient(120deg, #1d4ed8, #6d28d9);
+    color: white;
+    text-align: center;
+    padding: 25px 15px;
+    border-radius: 12px;
 }
 
-#studentList {
-  margin: 20px 0;
+header h1 {
+    font-size: 27px;
 }
+
+header p {
+    margin-top: 10px;
+    color: #dbeafe;
+}
+
+/* Main Section */
+
+.main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-top: 25px;
+}
+
+.student-section,
+.result-section {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* Student Cards */
 
 .student {
-  background: #eff6ff;
-  padding: 10px;
-  margin: 8px;
-  border-radius: 8px;
+    background: white;
+    padding: 14px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1px solid #e2e8f0;
+    transition: 0.3s;
+}
+
+.student:hover {
+    background: #dbeafe;
+    border-color: #2563eb;
+    transform: translateX(4px);
+}
+
+.student.active {
+    background: #dbeafe;
+    border: 2px solid #2563eb;
+    color: #1d4ed8;
+    font-weight: bold;
+}
+
+/* Dropdown */
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #aaa;
-  border-radius: 8px;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 15px;
+    background: white;
 }
 
+/* Button */
+
 button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
+    width: 100%;
+    padding: 13px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
 }
 
 button:hover {
-  background: #1d4ed8;
+    background: #1d4ed8;
 }
+
+button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+/* Loading */
 
 #loading {
-  color: blue;
+    text-align: center;
+    color: #2563eb;
+    margin-top: 25px;
 }
 
+.spinner {
+    width: 35px;
+    height: 35px;
+    border: 4px solid #bfdbfe;
+    border-top: 4px solid #2563eb;
+    border-radius: 50%;
+    margin: auto auto 12px;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Result */
+
 #result {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: bold;
+    margin-top: 20px;
 }
 
 .pass {
-  background: #dcfce7;
-  color: green;
+    background: #dcfce7;
+    color: #15803d;
+    padding: 18px;
+    border-radius: 10px;
+    line-height: 2;
 }
 
 .fail {
-  background: #fee2e2;
-  color: red;
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 18px;
+    border-radius: 10px;
+    line-height: 2;
+}
+
+.result-status {
+    font-size: 23px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Statistics */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.stats div {
+    background: #eff6ff;
+    padding: 18px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.stats h3 {
+    font-size: 25px;
+    color: #2563eb;
+}
+
+.stats p {
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+footer {
+    text-align: center;
+    color: #64748b;
+    margin-top: 25px;
+    font-size: 13px;
+}
+
+/* Mobile */
+
+@media(max-width: 650px) {
+
+    .main {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 21px;
+    }
+
+    .stats {
+        gap: 8px;
+    }
+
+    .stats div {
+        padding: 12px 5px;
+    }
 }

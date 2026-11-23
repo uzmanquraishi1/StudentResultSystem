@@ -3,23 +3,67 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Student Result System</title>
+
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
-      <h1>🎓 Student Dashboard</h1>
-      <p>Check Student Marks & Results</p>
-      <h3>Student List</h3>
-      <div id="studentList"></div>
-      <h3>Select Student</h3>
-      <select id="studentSelect">
-        <option value="">Select Student</option>
-      </select>
-      <button onclick="getMarks()">Get Marks</button>
-      <h3 id="loading"></h3>
-      <div id="result"></div>
+      <header>
+        <h1>🎓 Student Result System</h1>
+        <p>Check your academic performance</p>
+      </header>
+
+      <div class="main">
+        <!-- Student List -->
+        <div class="student-section">
+          <h2>👥 Students List</h2>
+          <div id="studentList"></div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section">
+          <h2>📊 Student Marks</h2>
+
+          <label>Select Student</label>
+
+          <select id="studentSelect" onchange="getMarks(this.value)">
+            <option value="">-- Select Student --</option>
+          </select>
+
+          <button id="getMarksBtn" onclick="getMarks()">Get Marks</button>
+
+          <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <p>Fetching marks... Please wait</p>
+          </div>
+
+          <div id="result"></div>
+        </div>
+      </div>
+
+      <!-- Statistics -->
+      <div class="stats">
+        <div>
+          <h3 id="total">0</h3>
+          <p>Total Students</p>
+        </div>
+
+        <div>
+          <h3 id="passed">0</h3>
+          <p>Passed</p>
+        </div>
+
+        <div>
+          <h3 id="failed">0</h3>
+          <p>Failed</p>
+        </div>
+      </div>
+
+      <footer>Made by <strong>Uzman Quraishi</strong> using HTML, CSS & JavaScript</footer>
     </div>
+
     <script src="script.js"></script>
   </body>
 </html>

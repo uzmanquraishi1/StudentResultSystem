@@ -1,87 +1,149 @@
-// Students name array
+// Students Array
+
 const students = [
-  { id: 1, name: "Uzman" },
-  { id: 2, name: "Haider" },
-  { id: 3, name: "Harshal" },
-  { id: 4, name: "Vidhi" },
-  { id: 5, name: "Asrar" },
-  { id: 6, name: "Amirah" },
+  { id: 1, name: "Uzman", marks: 78 },
+  { id: 2, name: "Haider", marks: 33 },
+  { id: 3, name: "Harshal", marks: 91 },
+  { id: 4, name: "Vidhi", marks: 89 },
+  { id: 5, name: "Asrar", marks: 67 },
+  { id: 6, name: "Amirah", marks: 95 },
+  { id: 7, name: "Anjali", marks: 34 },
 ];
 
-// Students marks array
-const marksData = [
-  { id: 1, marks: 78 },
-  { id: 2, marks: 33 },
-  { id: 3, marks: 91 },
-  { id: 4, marks: 89 },
-  { id: 5, marks: 67 },
-  { id: 6, marks: 95 },
-];
+// Get HTML Elements
+
+const studentList = document.getElementById("studentList");
+const studentSelect = document.getElementById("studentSelect");
+const loading = document.getElementById("loading");
+const result = document.getElementById("result");
+const button = document.getElementById("getMarksBtn");
 
 // Display Students using forEach()
-students.forEach((student) => {
-  document.getElementById("studentList").innerHTML +=
-    `<div class="student">${student.name}</div>`;
 
-  document.getElementById("studentSelect").innerHTML +=
-    `<option value="${student.id}">${student.name}</option>`;
+students.forEach((student) => {
+  // Display student card
+
+  studentList.innerHTML += `
+        <div class="student" onclick="getMarks(${student.id})">
+            👤 ${student.name}
+        </div>
+    `;
+
+  // Add student to dropdown
+
+  studentSelect.innerHTML += `
+        <option value="${student.id}">
+            ${student.name}
+        </option>
+    `;
 });
 
+// Display Statistics
+
+const totalStudents = students.length;
+
+const passedStudents = students.filter((student) => student.marks >= 35).length;
+
+const failedStudents = students.filter((student) => student.marks < 35).length;
+
+document.getElementById("total").innerHTML = totalStudents;
+
+document.getElementById("passed").innerHTML = passedStudents;
+
+document.getElementById("failed").innerHTML = failedStudents;
+
 // Promise Function
+
 function fetchMarks(id) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      const data = marksData.find((student) => student.id == id);
+      const data = students.find((student) => student.id == id);
 
       if (data) {
         resolve(data);
       } else {
-        reject("Student marks not found!!!");
+        reject("Student marks not found!");
       }
     }, 2000);
   });
 }
 
-// Async/Await function
-async function getMarks() {
-  const id = document.getElementById("studentSelect").value;
-  const loading = document.getElementById("loading");
-  const result = document.getElementById("result");
+// Async/Await Function
 
-  result.innerHTML = "";
-  result.innerHTML = "";
+async function getMarks(id = studentSelect.value) {
+  // Stop if another request is running
+
+  if (button.disabled) {
+    return;
+  }
+
+  // If no student selected
 
   if (id == "") {
-    result.innerHTML = "Please select s student!";
+    result.innerHTML = "Please select a student!";
     result.className = "fail";
     return;
   }
-  loading.innerHTML = "Loading.... Please wait";
+
+  // Update dropdown selection
+
+  studentSelect.value = id;
+
+  // Highlight selected student
+
+  const allStudents = document.querySelectorAll(".student");
+
+  allStudents.forEach((item, index) => {
+    item.classList.toggle("active", students[index].id == id);
+  });
+
+  // Show Loading
+
+  result.innerHTML = "";
+  result.className = "";
+
+  loading.classList.remove("hidden");
+
+  button.disabled = true;
+  button.innerHTML = "Loading...";
+
   try {
-    // Fetch marks
+    // Fetch marks using Promise
+
     const data = await fetchMarks(id);
 
-    // find student name
-    const student = students.find((s) => s.id == id);
-
     // Check Pass or Fail
+
     const status = data.marks >= 35 ? "PASS" : "FAIL";
 
-    loading.innerHTML = "";
+    // Display Result
+
+    result.className = status == "PASS" ? "pass" : "fail";
 
     result.innerHTML = `
-    Name: ${student.name} <br><br>
-    Marks: ${data.marks}<br><br>
-    Result: ${status}`;
+            <h3>🎓 Student Result</h3>
 
-    if (status == "PASS") {
-      result.className = "pass";
-    } else {
-      result.className = "fail";
-    }
+            Name: ${data.name}<br>
+
+            Student ID: ${data.id}<br>
+
+            Marks: ${data.marks}/100
+
+            <div class="result-status">
+                ${status == "PASS" ? "✅ PASS" : "❌ FAIL"}
+            </div>
+        `;
   } catch (error) {
-    loading.innerHTML = "";
-    result.innerHTML = error;
     result.className = "fail";
+    result.innerHTML = error;
+  } finally {
+    // Hide Loading
+
+    loading.classList.add("hidden");
+
+    // Enable Button
+
+    button.disabled = false;
+    button.innerHTML = "Get Marks";
   }
 }
