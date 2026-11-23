@@ -8,40 +8,14 @@
 
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
     <div class="container">
+      <!-- Header -->
       <header>
         <h1>🎓 Student Result System</h1>
-        <p>Check your academic performance</p>
+        <p>Manage Students and Check Results</p>
       </header>
-
-      <div class="main">
-        <!-- Student List -->
-        <div class="student-section">
-          <h2>👥 Students List</h2>
-          <div id="studentList"></div>
-        </div>
-
-        <!-- Result Section -->
-        <div class="result-section">
-          <h2>📊 Student Marks</h2>
-
-          <label>Select Student</label>
-
-          <select id="studentSelect" onchange="getMarks(this.value)">
-            <option value="">-- Select Student --</option>
-          </select>
-
-          <button id="getMarksBtn" onclick="getMarks()">Get Marks</button>
-
-          <div id="loading" class="hidden">
-            <div class="spinner"></div>
-            <p>Fetching marks... Please wait</p>
-          </div>
-
-          <div id="result"></div>
-        </div>
-      </div>
 
       <!-- Statistics -->
       <div class="stats">
@@ -61,7 +35,60 @@
         </div>
       </div>
 
-      <footer>Made by <strong>Uzman Quraishi</strong> using HTML, CSS & JavaScript</footer>
+      <!-- Add Student Form -->
+      <div class="add-student">
+        <h2>➕ Add New Student</h2>
+
+        <input type="text" id="studentName" placeholder="Enter student name" />
+
+        <input
+          type="number"
+          id="studentMarks"
+          placeholder="Enter marks (0-100)"
+          min="0"
+          max="100"
+        />
+
+        <button onclick="addStudent()">Add Student</button>
+      </div>
+
+      <!-- Main Section -->
+      <div class="main">
+        <!-- Student List -->
+        <div class="student-section">
+          <h2>👨‍🎓 Students List</h2>
+
+          <div id="studentList"></div>
+        </div>
+
+        <!-- Result Section -->
+        <div class="result-section">
+          <h2>📊 Check Result</h2>
+
+          <label>Select Student</label>
+
+          <select id="studentSelect">
+            <option value="">-- Select Student --</option>
+          </select>
+
+          <button id="getMarksBtn" onclick="getMarks()">Get Marks</button>
+
+          <!-- Loading -->
+          <div id="loading" class="hidden">
+            <div class="spinner"></div>
+
+            <p>Please wait... Fetching marks</p>
+          </div>
+
+          <!-- Result -->
+          <div id="result"></div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer>
+        Created by <strong>Uzman Quraishi</strong> using HTML, CSS & JavaScript.
+      </footer>
     </div>
 
     <script src="script.js"></script>

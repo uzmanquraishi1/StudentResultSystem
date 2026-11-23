@@ -7,50 +7,62 @@ const students = [
   { id: 4, name: "Vidhi", marks: 89 },
   { id: 5, name: "Asrar", marks: 67 },
   { id: 6, name: "Amirah", marks: 95 },
-  { id: 7, name: "Anjali", marks: 34 },
 ];
 
 // Get HTML Elements
 
 const studentList = document.getElementById("studentList");
+
 const studentSelect = document.getElementById("studentSelect");
+
 const loading = document.getElementById("loading");
+
 const result = document.getElementById("result");
+
 const button = document.getElementById("getMarksBtn");
 
-// Display Students using forEach()
+// Display Students Function
 
-students.forEach((student) => {
-  // Display student card
+function displayStudents() {
+  studentList.innerHTML = "";
 
-  studentList.innerHTML += `
-        <div class="student" onclick="getMarks(${student.id})">
-            👤 ${student.name}
-        </div>
-    `;
+  studentSelect.innerHTML = '<option value="">-- Select Student --</option>';
 
-  // Add student to dropdown
+  students.forEach((student) => {
+    // Display Student Card
 
-  studentSelect.innerHTML += `
-        <option value="${student.id}">
-            ${student.name}
-        </option>
-    `;
-});
+    studentList.innerHTML += `
+            <div class="student"
+                 onclick="getMarks(${student.id})">
+                👤 ${student.name}
+            </div>
+        `;
 
-// Display Statistics
+    // Add Student to Dropdown
 
-const totalStudents = students.length;
+    studentSelect.innerHTML += `
+            <option value="${student.id}">
+                ${student.name}
+            </option>
+        `;
+  });
+}
 
-const passedStudents = students.filter((student) => student.marks >= 35).length;
+// Update Statistics Function
 
-const failedStudents = students.filter((student) => student.marks < 35).length;
+function updateStats() {
+  const total = students.length;
 
-document.getElementById("total").innerHTML = totalStudents;
+  const passed = students.filter((student) => student.marks >= 35).length;
 
-document.getElementById("passed").innerHTML = passedStudents;
+  const failed = students.filter((student) => student.marks < 35).length;
 
-document.getElementById("failed").innerHTML = failedStudents;
+  document.getElementById("total").innerHTML = total;
+
+  document.getElementById("passed").innerHTML = passed;
+
+  document.getElementById("failed").innerHTML = failed;
+}
 
 // Promise Function
 
@@ -71,25 +83,26 @@ function fetchMarks(id) {
 // Async/Await Function
 
 async function getMarks(id = studentSelect.value) {
-  // Stop if another request is running
+  // Prevent Multiple Clicks
 
   if (button.disabled) {
     return;
   }
 
-  // If no student selected
+  // Check Selection
 
   if (id == "") {
     result.innerHTML = "Please select a student!";
     result.className = "fail";
+
     return;
   }
 
-  // Update dropdown selection
+  // Update Dropdown
 
   studentSelect.value = id;
 
-  // Highlight selected student
+  // Highlight Selected Student
 
   const allStudents = document.querySelectorAll(".student");
 
@@ -97,10 +110,12 @@ async function getMarks(id = studentSelect.value) {
     item.classList.toggle("active", students[index].id == id);
   });
 
-  // Show Loading
+  // Clear Previous Result
 
   result.innerHTML = "";
   result.className = "";
+
+  // Show Loading
 
   loading.classList.remove("hidden");
 
@@ -108,11 +123,11 @@ async function getMarks(id = studentSelect.value) {
   button.innerHTML = "Loading...";
 
   try {
-    // Fetch marks using Promise
+    // Fetch Student Marks
 
     const data = await fetchMarks(id);
 
-    // Check Pass or Fail
+    // Pass or Fail
 
     const status = data.marks >= 35 ? "PASS" : "FAIL";
 
@@ -121,20 +136,25 @@ async function getMarks(id = studentSelect.value) {
     result.className = status == "PASS" ? "pass" : "fail";
 
     result.innerHTML = `
+
             <h3>🎓 Student Result</h3>
 
-            Name: ${data.name}<br>
+            Name: ${data.name}<br><br>
 
-            Student ID: ${data.id}<br>
+            Student ID: ${data.id}<br><br>
 
             Marks: ${data.marks}/100
 
             <div class="result-status">
+
                 ${status == "PASS" ? "✅ PASS" : "❌ FAIL"}
+
             </div>
+
         `;
   } catch (error) {
     result.className = "fail";
+
     result.innerHTML = error;
   } finally {
     // Hide Loading
@@ -144,6 +164,84 @@ async function getMarks(id = studentSelect.value) {
     // Enable Button
 
     button.disabled = false;
+
     button.innerHTML = "Get Marks";
   }
 }
+
+// Add New Student Function
+
+function addStudent() {
+  // Get Input Values
+
+  const name = document.getElementById("studentName").value.trim();
+
+  const marksInput = document.getElementById("studentMarks").value;
+
+  const marks = Number(marksInput);
+
+  // Validation
+
+  if (name === "" || marksInput === "") {
+    alert("Please enter student name and marks!");
+
+    return;
+  }
+
+  if (Number.isNaN(marks) || marks < 0 || marks > 100) {
+    alert("Marks must be between 0 and 100!");
+
+    return;
+  }
+
+  // Generate New ID
+
+  const id =
+    students.length > 0 ? Math.max(...students.map((s) => s.id)) + 1 : 1;
+
+  // Create New Student Object
+
+  const newStudent = {
+    id: id,
+
+    name: name,
+
+    marks: marks,
+  };
+
+  // Add Student to Array
+
+  students.push(newStudent);
+
+  // Update Student List and Dropdown
+
+  displayStudents();
+
+  // Update Statistics
+
+  updateStats();
+
+  // Clear Input Fields
+
+  document.getElementById("studentName").value = "";
+
+  document.getElementById("studentMarks").value = "";
+
+  // Success Message
+
+  alert("Student added successfully!");
+}
+
+// Initial Display
+
+displayStudents();
+
+updateStats();
+
+// Dropdown Change Event
+
+studentSelect.addEventListener("change", () => {
+  if (studentSelect.value !== "") {
+    getMarks();
+  }
+});
