@@ -1,6 +1,6 @@
-// Students Array
+// Default student data
 
-const students = [
+const defaultStudents = [
   { id: 1, name: "Uzman", marks: 78 },
   { id: 2, name: "Haider", marks: 33 },
   { id: 3, name: "Harshal", marks: 91 },
@@ -9,7 +9,19 @@ const students = [
   { id: 6, name: "Amirah", marks: 95 },
 ];
 
-// Get HTML Elements
+// Load saved students from localStorage
+
+const savedStudents = localStorage.getItem("students");
+
+const students = savedStudents ? JSON.parse(savedStudents) : defaultStudents;
+
+// Save default data if no previous data exists
+
+if (savedStudents === null) {
+  localStorage.setItem("students", JSON.stringify(students));
+}
+
+// 2. GET HTML ELEMENTS
 
 const studentList = document.getElementById("studentList");
 
@@ -21,7 +33,13 @@ const result = document.getElementById("result");
 
 const button = document.getElementById("getMarksBtn");
 
-// Display Students Function
+// 3. SAVE STUDENTS FUNCTION
+
+function saveStudents() {
+  localStorage.setItem("students", JSON.stringify(students));
+}
+
+// 4. DISPLAY STUDENTS FUNCTION
 
 function displayStudents() {
   studentList.innerHTML = "";
@@ -32,23 +50,23 @@ function displayStudents() {
     // Display Student Card
 
     studentList.innerHTML += `
-            <div class="student"
-                 onclick="getMarks(${student.id})">
-                👤 ${student.name}
-            </div>
-        `;
+      <div class="student"
+           onclick="getMarks(${student.id})">
+          👤 ${student.name}
+      </div>
+    `;
 
     // Add Student to Dropdown
 
     studentSelect.innerHTML += `
-            <option value="${student.id}">
-                ${student.name}
-            </option>
-        `;
+      <option value="${student.id}">
+          ${student.name}
+      </option>
+    `;
   });
 }
 
-// Update Statistics Function
+// 5. UPDATE STATISTICS FUNCTION
 
 function updateStats() {
   const total = students.length;
@@ -64,7 +82,7 @@ function updateStats() {
   document.getElementById("failed").innerHTML = failed;
 }
 
-// Promise Function
+// 6. PROMISE FUNCTION
 
 function fetchMarks(id) {
   return new Promise((resolve, reject) => {
@@ -80,7 +98,7 @@ function fetchMarks(id) {
   });
 }
 
-// Async/Await Function
+// 7. ASYNC / AWAIT FUNCTION
 
 async function getMarks(id = studentSelect.value) {
   // Prevent Multiple Clicks
@@ -93,6 +111,7 @@ async function getMarks(id = studentSelect.value) {
 
   if (id == "") {
     result.innerHTML = "Please select a student!";
+
     result.className = "fail";
 
     return;
@@ -113,6 +132,7 @@ async function getMarks(id = studentSelect.value) {
   // Clear Previous Result
 
   result.innerHTML = "";
+
   result.className = "";
 
   // Show Loading
@@ -120,6 +140,7 @@ async function getMarks(id = studentSelect.value) {
   loading.classList.remove("hidden");
 
   button.disabled = true;
+
   button.innerHTML = "Loading...";
 
   try {
@@ -137,21 +158,21 @@ async function getMarks(id = studentSelect.value) {
 
     result.innerHTML = `
 
-            <h3>🎓 Student Result</h3>
+      <h3>🎓 Student Result</h3>
 
-            Name: ${data.name}<br><br>
+      Name: ${data.name}<br><br>
 
-            Student ID: ${data.id}<br><br>
+      Student ID: ${data.id}<br><br>
 
-            Marks: ${data.marks}/100
+      Marks: ${data.marks}/100
 
-            <div class="result-status">
+      <div class="result-status">
 
-                ${status == "PASS" ? "✅ PASS" : "❌ FAIL"}
+        ${status == "PASS" ? "✅ PASS" : "❌ FAIL"}
 
-            </div>
+      </div>
 
-        `;
+    `;
   } catch (error) {
     result.className = "fail";
 
@@ -169,7 +190,7 @@ async function getMarks(id = studentSelect.value) {
   }
 }
 
-// Add New Student Function
+// 8. ADD NEW STUDENT FUNCTION
 
 function addStudent() {
   // Get Input Values
@@ -213,6 +234,10 @@ function addStudent() {
 
   students.push(newStudent);
 
+  // SAVE UPDATED STUDENT DATA
+
+  saveStudents();
+
   // Update Student List and Dropdown
 
   displayStudents();
@@ -232,13 +257,13 @@ function addStudent() {
   alert("Student added successfully!");
 }
 
-// Initial Display
+// 9. INITIAL DISPLAY
 
 displayStudents();
 
 updateStats();
 
-// Dropdown Change Event
+// 10. DROPDOWN CHANGE EVENT
 
 studentSelect.addEventListener("change", () => {
   if (studentSelect.value !== "") {

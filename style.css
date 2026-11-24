@@ -61,6 +61,14 @@ header p {
   color: #2563eb;
 }
 
+.stats #passed {
+  color: green;
+}
+
+.stats #failed {
+  color: red;
+}
+
 .stats p {
   margin-top: 5px;
   font-size: 13px;
